@@ -27,6 +27,9 @@
     <ClInclude Include="imgui_injection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
