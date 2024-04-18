@@ -1,11 +1,12 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
-#include "pch.h"
 #include <Windows.h>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include "imgui/imgui.h"
 #include <MinHook.h>
+#include <d3d9.h>
+#include <d3dx9.h>
 
 HINSTANCE dll_handle;
 DWORD* mhfdll_addy = nullptr;
