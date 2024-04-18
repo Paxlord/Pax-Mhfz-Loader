@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include "imgui/imgui.h"
+#include <MinHook.h>
 
 HINSTANCE dll_handle;
 DWORD* mhfdll_addy = nullptr;
@@ -15,7 +17,6 @@ DWORD __stdcall EjectThread(LPVOID lpParameter) {
 }
 
 DWORD WINAPI Loader(HMODULE base) {
-
     AllocConsole();
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
