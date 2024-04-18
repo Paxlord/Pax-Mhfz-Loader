@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
-#include "imgui/imgui.h"
-#include <MinHook.h>
-#include <d3d9.h>
-#include <d3dx9.h>
+#include "imgui_injection.h"
+
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
+#pragma comment(lib, "libMinHook.x86.lib")
 
 HINSTANCE dll_handle;
 DWORD* mhfdll_addy = nullptr;
@@ -18,9 +19,14 @@ DWORD __stdcall EjectThread(LPVOID lpParameter) {
 }
 
 DWORD WINAPI Loader(HMODULE base) {
+
+    IMGuiInjection::getWindowHandle();
+
     AllocConsole();
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
+
+    IMGuiInjection::hookEndScene();
 
     do {
         mhfdll_addy = (DWORD*)GetModuleHandleA("mhfo-hd.dll");
@@ -50,10 +56,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-    case DLL_THREAD_ATTACH:
         dll_handle = hModule;
         DisableThreadLibraryCalls(hModule);
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loader, NULL, 0, NULL);
+        break;
+    case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:
         break;
