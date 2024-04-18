@@ -20,14 +20,18 @@ DWORD __stdcall EjectThread(LPVOID lpParameter) {
 
 DWORD WINAPI Loader(HMODULE base) {
 
+    //Get the main mhfz window handle before anything else
     IMGuiInjection::getWindowHandle();
 
+    //Creating debug console
     AllocConsole();
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
+    //Hooking dx9 endscene for imgui
     IMGuiInjection::hookEndScene();
 
+    //Getting the main dll adress
     do {
         mhfdll_addy = (DWORD*)GetModuleHandleA("mhfo-hd.dll");
         Sleep(50);
