@@ -38,7 +38,7 @@ ModManager::ModManager() {
 			continue;
 		}
 
-		std::cout << "Loaded mod : " << mod->name << "at path : " << absolute_path << std::endl;
+		std::cout << "Loaded mod : " << (mod->name) << " at path : " << (absolute_path) << std::endl;
 		mod_list.push_back(mod);
 	}
 

@@ -6,7 +6,6 @@
 #include "imgui_injection.h"
 #include "ModManager.h"
 #include "globals.h"
-#include <color.hpp>
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
