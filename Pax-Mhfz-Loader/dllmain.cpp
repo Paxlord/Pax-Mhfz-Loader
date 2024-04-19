@@ -20,6 +20,14 @@ DWORD __stdcall EjectThread(LPVOID lpParameter) {
     return 0;
 }
 
+DWORD SetMhfDllAddy() {
+    //Getting the main dll adress
+    do {
+        mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
+        Sleep(50);
+    } while (!mhfdll_addy);
+}
+
 DWORD WINAPI Loader(HMODULE base) {
 
     //Get the main mhfz window handle before anything else
@@ -33,11 +41,8 @@ DWORD WINAPI Loader(HMODULE base) {
     //Hooking dx9 endscene for imgui
     IMGuiInjection::hookEndScene();
 
-    //Getting the main dll adress
-    do {
-        mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
-        Sleep(50);
-    } while (!mhfdll_addy);
+    SetMhfDllAddy();
+    
 
     std::cout << "DLLMAIN : mhfo-hd.dll addy found : " << mhfdll_addy << std::endl;
     ModManager::get_instance()->AttachAll();
