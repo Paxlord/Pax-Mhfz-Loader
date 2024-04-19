@@ -3,13 +3,30 @@
 
 namespace fs = std::filesystem;
 
+typedef int(__thiscall* game_core)();
+game_core gc;
+DWORD game_core_addy = 0x89BE10;
+
+int hk_game_core() {
+	
+	for (const auto& mod : ModManager::GetInstance()->GetModList()) {
+		mod->UpdateQuest();
+	}
+
+	return gc();
+}
+
 ModManager* ModManager::instance = nullptr;
 
-ModManager* ModManager::get_instance() {
+ModManager* ModManager::GetInstance() {
 	if (!instance) {
 		instance = new ModManager();
 	}
 	return instance;
+}
+
+std::vector<Mod*> ModManager::GetModList() {
+	return mod_list;
 }
 
 ModManager::ModManager() {
@@ -63,7 +80,9 @@ void ModManager::DetachAll() {
 void ModManager::DrawModMenu() {
 	ImGui::Begin("Mod Menu");
 	for (const auto& mod: mod_list) {
-		mod->DrawUI();
+		if (ImGui::CollapsingHeader(mod->display_name.c_str())) {
+			mod->DrawUI();
+		}
 	}
 	ImGui::End();
 }
@@ -73,3 +92,9 @@ void ModManager::InitializeImGUICtx(ImGuiContext* ctx) {
 		mod->InitImGUIContext(ctx);
 	}
 }
+
+void ModManager::HookUpdates() {
+	MH_CreateHook((LPVOID)OffsetByDll(game_core_addy), (LPVOID)hk_game_core, (LPVOID*)&gc);
+	MH_EnableHook((LPVOID)OffsetByDll(game_core_addy));
+}
+

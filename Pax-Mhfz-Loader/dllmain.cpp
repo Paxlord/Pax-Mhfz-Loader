@@ -44,8 +44,9 @@ DWORD WINAPI Loader(HMODULE base) {
     std::cout << "mhfo-hd.dll addy found : " << dye::purple(mhfdll_addy) << std::endl;
 
     ModManager::get_instance()->AttachAll();
-
     IMGuiInjection::hookEndScene();
+    ModManager::get_instance()->HookUpdates();
+
     while (true) {
         Sleep(50);
     }

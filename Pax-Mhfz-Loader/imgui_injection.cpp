@@ -31,7 +31,7 @@ HWND GetProcessWindow() {
 void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
     ImGui::CreateContext();
 
-    ModManager::get_instance()->InitializeImGUICtx(ImGui::GetCurrentContext());
+    ModManager::GetInstance()->InitializeImGUICtx(ImGui::GetCurrentContext());
 
     ImGuiIO& io = ImGui::GetIO();
     //io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
@@ -56,7 +56,7 @@ HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
 
     ImGui::GetIO().MouseDrawCursor = showMenu;
     if (showMenu == true && mhfdll_addy) {
-        ModManager::get_instance()->DrawModMenu();
+        ModManager::GetInstance()->DrawModMenu();
     }
 
     ImGui::EndFrame();
