@@ -63,9 +63,7 @@ void ModManager::DetachAll() {
 void ModManager::DrawModMenu() {
 	ImGui::Begin("Mod Menu");
 	for (const auto& mod: mod_list) {
-		if (ImGui::CollapsingHeader(mod->display_name.c_str())) {
-			mod->DrawUI();
-		}
+		mod->DrawUI();
 	}
 	ImGui::End();
 }

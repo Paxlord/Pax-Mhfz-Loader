@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include "imgui/imgui.h"
 
 class Mod {
 public:
@@ -12,6 +13,7 @@ public:
 		this->display_name = display_name;
 	}
 
+	void initImGuiContext(ImGuiContext* ctx);
 	virtual void Attach() = 0;
 	virtual void Detach() = 0;
 	virtual void DrawUI() {};
