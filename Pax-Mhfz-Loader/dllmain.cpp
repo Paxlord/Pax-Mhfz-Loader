@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "imgui_injection.h"
+#include "ModManager.h"
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -38,6 +39,7 @@ DWORD WINAPI Loader(HMODULE base) {
     } while (!mhfdll_addy);
 
     std::cout << "DLLMAIN : mhfo-hd.dll addy found : " << mhfdll_addy << std::endl;
+    ModManager::get_instance()->AttachAll();
 
     while (true) {
         Sleep(50);

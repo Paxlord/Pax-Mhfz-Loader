@@ -1,1 +1,58 @@
 #include "ModManager.h"
+
+namespace fs = std::filesystem;
+
+ModManager* ModManager::instance = nullptr;
+
+ModManager* ModManager::get_instance() {
+	if (!instance) {
+		instance = new ModManager();
+	}
+	return instance;
+}
+
+ModManager::ModManager() {
+
+	std::string mod_folder = "./mods";
+	for (const auto& entry : fs::directory_iterator(mod_folder)) {
+		std::string file_extension = entry.path().extension().generic_string();
+		if (file_extension != ".dll") continue;
+
+		std::string absolute_path = fs::absolute(entry.path()).generic_string();
+
+		HMODULE dll_handle = LoadLibrary(absolute_path.c_str());
+		if (!dll_handle) {
+			std::cout << "Error while loading dll : '" << absolute_path << "' Skipping..." << std::endl;
+			continue;
+		}
+		
+		std::cout << "Dll found, trying to parse createMod function." << std::endl;
+		t_createMod createMod = (t_createMod)(GetProcAddress(dll_handle, "createMod"));
+		if (!createMod) {
+			std::cout << "GetProcAddress Failed " << GetLastError() << std::endl;
+			continue;
+		}
+		std::cout << "Function Found, creating mod." << std::endl;
+		Mod* mod = createMod();
+		if (!mod) {
+			std::cout << "Error while creating mod instance " << GetLastError() << std::endl;
+			continue;
+		}
+
+		std::cout << "Loading mod : " << mod->name << std::endl;
+		mod_list.push_back(mod);
+	}
+
+}
+
+void ModManager::AttachAll() {
+	for (const auto& mod : mod_list) {
+		mod->Attach();
+	}
+
+	std::cout << "Attached " << mod_list.size() << " mods successfully." << std::endl;
+}
+
+void ModManager::DetachAll() {
+
+}

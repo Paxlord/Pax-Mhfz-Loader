@@ -2,8 +2,13 @@
 #include <Windows.h>
 #include <vector>
 #include <iostream>
+#include <filesystem>
+#include <string>
 
 #include "mod.h"
+
+typedef Mod* ( *t_createMod)();
+typedef void(*t_logthing)();
 
 class ModManager
 {
@@ -15,7 +20,5 @@ public:
 	static ModManager* get_instance();
 	void AttachAll();
 	void DetachAll();
-	void makeModList();
-
 };
 

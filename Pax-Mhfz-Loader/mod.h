@@ -3,9 +3,12 @@
 
 class Mod {
 public:
-	virtual void ApplyHooks(DWORD dll_addy) = 0;
-	virtual void RemoveHook() = 0;
-	virtual void DrawUI() {
+	const char* name = "";
+	const char* display_name = "";
 
-	}
+	virtual void Attach() = 0;
+	virtual void Detach() = 0;
+	virtual void DrawUI() {};
+	virtual void UpdateQuest() {};
+	virtual void UpdateLobby() {};
 };
