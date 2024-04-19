@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include "imgui/imgui.h"
 
 #include "mod.h"
 
@@ -20,5 +21,6 @@ public:
 	static ModManager* get_instance();
 	void AttachAll();
 	void DetachAll();
+	void DrawModMenu();
 };
 
