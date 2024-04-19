@@ -26,20 +26,19 @@ ModManager::ModManager() {
 			continue;
 		}
 		
-		std::cout << "Dll found, trying to parse createMod function." << std::endl;
 		t_createMod createMod = (t_createMod)(GetProcAddress(dll_handle, "createMod"));
 		if (!createMod) {
 			std::cout << "GetProcAddress Failed " << GetLastError() << std::endl;
 			continue;
 		}
-		std::cout << "Function Found, creating mod." << std::endl;
+
 		Mod* mod = createMod();
 		if (!mod) {
 			std::cout << "Error while creating mod instance " << GetLastError() << std::endl;
 			continue;
 		}
 
-		std::cout << "Loading mod : " << mod->name << std::endl;
+		std::cout << "Loaded mod : " << mod->name << "at path : " << absolute_path << std::endl;
 		mod_list.push_back(mod);
 	}
 
