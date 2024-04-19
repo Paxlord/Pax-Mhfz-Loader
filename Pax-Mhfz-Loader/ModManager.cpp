@@ -28,11 +28,14 @@ ModManager::ModManager() {
 		}
 		
 		t_createMod createMod = (t_createMod)(GetProcAddress(dll_handle, "createMod"));
-		if (!createMod) {
+		t_setDllAddy setDllAddy = (t_setDllAddy)(GetProcAddress(dll_handle, "setDllAddress"));
+
+		if (!createMod || !setDllAddy) {
 			std::cout << "GetProcAddress Failed " << GetLastError() << std::endl;
 			continue;
 		}
 
+		setDllAddy(mhfdll_addy);
 		Mod* mod = createMod();
 		if (!mod) {
 			std::cout << "Error while creating mod instance " << GetLastError() << std::endl;

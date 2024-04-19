@@ -6,6 +6,7 @@
 #include "imgui_injection.h"
 #include "ModManager.h"
 #include "globals.h"
+#include "color.hpp"
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -40,7 +41,7 @@ DWORD WINAPI Loader(HMODULE base) {
 
     SetMhfDllAddy();
     
-    std::cout << "mhfo-hd.dll addy found : " << (mhfdll_addy) << std::endl;
+    std::cout << "mhfo-hd.dll addy found : " << dye::purple(mhfdll_addy) << std::endl;
 
     ModManager::get_instance()->AttachAll();
 
