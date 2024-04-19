@@ -38,15 +38,12 @@ DWORD WINAPI Loader(HMODULE base) {
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
-    //Hooking dx9 endscene for imgui
-    IMGuiInjection::hookEndScene();
-
     SetMhfDllAddy();
     
-
     std::cout << "DLLMAIN : mhfo-hd.dll addy found : " << mhfdll_addy << std::endl;
     ModManager::get_instance()->AttachAll();
 
+    IMGuiInjection::hookEndScene();
     while (true) {
         Sleep(50);
     }
