@@ -22,6 +22,7 @@ public:
 	static ModManager* get_instance();
 	void AttachAll();
 	void DetachAll();
+	void InitializeImGUICtx(ImGuiContext* ctx);
 	void DrawModMenu();
 };
 

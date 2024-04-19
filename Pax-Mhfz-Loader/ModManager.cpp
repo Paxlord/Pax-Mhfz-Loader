@@ -67,3 +67,9 @@ void ModManager::DrawModMenu() {
 	}
 	ImGui::End();
 }
+
+void ModManager::InitializeImGUICtx(ImGuiContext* ctx) {
+	for (const auto& mod : mod_list) {
+		mod->initImGuiContext(ctx);
+	}
+}

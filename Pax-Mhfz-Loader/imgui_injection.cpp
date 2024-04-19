@@ -30,6 +30,9 @@ HWND GetProcessWindow() {
 
 void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
     ImGui::CreateContext();
+
+    ModManager::get_instance()->InitializeImGUICtx(ImGui::GetCurrentContext());
+
     ImGuiIO& io = ImGui::GetIO();
     //io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
     ImGui_ImplWin32_Init(window);
