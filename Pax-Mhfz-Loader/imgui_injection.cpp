@@ -111,7 +111,7 @@ void IMGuiInjection::hookEndScene() {
         return;
     }
 
-    std::cout << "Hooked EndScene" << std::endl;
+    std::cout << "Imgui Injection complete!" << std::endl;
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWL_WNDPROC, (LONG_PTR)WndProc);
 
     pDevice->Release();
