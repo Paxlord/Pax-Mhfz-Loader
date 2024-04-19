@@ -20,7 +20,7 @@ DWORD __stdcall EjectThread(LPVOID lpParameter) {
     return 0;
 }
 
-DWORD SetMhfDllAddy() {
+void SetMhfDllAddy() {
     //Getting the main dll adress
     do {
         mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
