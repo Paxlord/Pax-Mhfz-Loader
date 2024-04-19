@@ -52,11 +52,8 @@ HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
         showMenu = !showMenu;
 
     ImGui::GetIO().MouseDrawCursor = showMenu;
-    if (showMenu == true) {
-        ImGui::Begin("Mod Menu");
-        ImGui::End();
-        //InputHandler();
-        //ModManager::get_instance()->DrawModMenu();
+    if (showMenu == true && mhfdll_addy) {
+        ModManager::get_instance()->DrawModMenu();
     }
 
     ImGui::EndFrame();

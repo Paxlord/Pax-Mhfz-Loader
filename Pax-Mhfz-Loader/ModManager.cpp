@@ -58,9 +58,6 @@ void ModManager::DetachAll() {
 }
 
 void ModManager::DrawModMenu() {
-	if (mod_list.size() <= 0)
-		return;
-
 	ImGui::Begin("Mod Menu");
 	for (const auto& mod: mod_list) {
 		mod->DrawUI();

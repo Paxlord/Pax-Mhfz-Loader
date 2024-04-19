@@ -9,6 +9,9 @@
 #include <MinHook.h>
 #include <iostream>
 
+#include "globals.h"
+#include "ModManager.h"
+
 namespace IMGuiInjection{
 	void hookEndScene();
 	void getWindowHandle();

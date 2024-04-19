@@ -5,13 +5,14 @@
 #include <fstream>
 #include "imgui_injection.h"
 #include "ModManager.h"
+#include "globals.h"
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 #pragma comment(lib, "libMinHook.x86.lib")
 
 HINSTANCE dll_handle;
-DWORD* mhfdll_addy = nullptr;
+int mhfdll_addy = 0;
 
 DWORD __stdcall EjectThread(LPVOID lpParameter) {
     Sleep(100);
@@ -34,7 +35,7 @@ DWORD WINAPI Loader(HMODULE base) {
 
     //Getting the main dll adress
     do {
-        mhfdll_addy = (DWORD*)GetModuleHandleA("mhfo-hd.dll");
+        mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
         Sleep(50);
     } while (!mhfdll_addy);
 
