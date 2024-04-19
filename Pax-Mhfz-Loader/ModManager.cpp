@@ -1,4 +1,5 @@
 #include "ModManager.h"
+#include "color.hpp"
 
 namespace fs = std::filesystem;
 
@@ -38,7 +39,7 @@ ModManager::ModManager() {
 			continue;
 		}
 
-		std::cout << "Loaded mod : " << (mod->name) << " at path : " << (absolute_path) << std::endl;
+		std::cout << "Loaded mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
 		mod_list.push_back(mod);
 	}
 
@@ -59,7 +60,9 @@ void ModManager::DetachAll() {
 void ModManager::DrawModMenu() {
 	ImGui::Begin("Mod Menu");
 	for (const auto& mod: mod_list) {
-		mod->DrawUI();
+		if (ImGui::CollapsingHeader(mod->display_name.c_str())) {
+			mod->DrawUI();
+		}
 	}
 	ImGui::End();
 }
