@@ -4,9 +4,9 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+
 #include "imgui/imgui.h"
 #include "globals.h"
-
 #include "mod.h"
 
 typedef Mod* ( *t_createMod)();

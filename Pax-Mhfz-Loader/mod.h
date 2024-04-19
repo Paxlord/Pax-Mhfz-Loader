@@ -13,7 +13,7 @@ public:
 		this->display_name = display_name;
 	}
 
-	void initImGuiContext(ImGuiContext* ctx);
+	virtual void InitImGUIContext(ImGuiContext* ctx) = 0;
 	virtual void Attach() = 0;
 	virtual void Detach() = 0;
 	virtual void DrawUI() {};
