@@ -1,7 +1,8 @@
 #pragma once
 
-extern int mhfdll_addy;
-extern const int VERSION;
+inline int mhfdll_addy = 0;
+inline bool NO_LGE = false;
+inline const int VERSION = 1;
 
 inline int OffsetByDll(int addy) {
 	return addy + mhfdll_addy;
