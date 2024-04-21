@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include <TlHelp32.h>
+#include <tchar.h>
+
 #include "imgui_injection.h"
 #include "ModManager.h"
 #include "globals.h"
@@ -13,7 +16,39 @@
 #pragma comment(lib, "libMinHook.x86.lib")
 
 HINSTANCE dll_handle;
+HANDLE loader_thread;
 int mhfdll_addy = 0;
+
+std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
+
+    HANDLE hthreadsnapshot = INVALID_HANDLE_VALUE;
+    THREADENTRY32 tentry;
+    std::vector<HANDLE> thread_list;
+
+    hthreadsnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    if (hthreadsnapshot == INVALID_HANDLE_VALUE)
+        return thread_list;
+    
+    tentry.dwSize = sizeof(THREADENTRY32);
+
+    if (!Thread32First(hthreadsnapshot, &tentry)) {
+        CloseHandle(hthreadsnapshot);
+        return thread_list;
+    }
+
+    do {
+        if (tentry.th32OwnerProcessID == dwOwnerPID)
+        {
+            HANDLE thread_handle = OpenThread(THREAD_SUSPEND_RESUME, FALSE, tentry.th32ThreadID);
+            if (thread_handle && tentry.th32ThreadID != GetThreadId(GetCurrentThread()))
+                thread_list.push_back(thread_handle);
+        }
+    } while (Thread32Next(hthreadsnapshot, &tentry));
+
+    CloseHandle(hthreadsnapshot);
+    return thread_list;
+
+}
 
 DWORD __stdcall EjectThread(LPVOID lpParameter) {
     Sleep(100);
@@ -32,20 +67,31 @@ void SetMhfDllAddy() {
 DWORD WINAPI Loader(HMODULE base) {
 
     //Get the main mhfz window handle before anything else
-    IMGuiInjection::getWindowHandle();
+    HWND main_window = IMGuiInjection::getWindowHandle();
 
     //Creating debug console
     AllocConsole();
     FILE* fp;
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
+    std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
+    std::cout << "Loader thread " << GetThreadId(GetCurrentThread()) << std::endl;
+
+
     SetMhfDllAddy();
-    
     std::cout << "mhfo-hd.dll addy found : " << dye::purple(mhfdll_addy) << std::endl;
 
-    ModManager::get_instance()->AttachAll();
+    for (const auto handle : list) {
+        SuspendThread(handle);
+    }
+
+    ModManager::GetInstance()->AttachAll();
     IMGuiInjection::hookEndScene();
-    ModManager::get_instance()->HookUpdates();
+    ModManager::GetInstance()->HookUpdates();
+
+    for (const auto handle : list) {
+        ResumeThread(handle);
+    }
 
     while (true) {
         Sleep(50);
@@ -70,7 +116,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_ATTACH:
         dll_handle = hModule;
         DisableThreadLibraryCalls(hModule);
-        CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loader, NULL, 0, NULL);
+        loader_thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loader, NULL, 0, NULL);
         break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:

@@ -69,7 +69,7 @@ void ModManager::AttachAll() {
 	for (const auto& mod : mod_list) {
 		mod->Attach();
 	}
-
+	Sleep(5000);
 	std::cout << "Attached " << mod_list.size() << " mods successfully." << std::endl;
 }
 

@@ -14,5 +14,5 @@
 
 namespace IMGuiInjection{
 	void hookEndScene();
-	void getWindowHandle();
+	HWND getWindowHandle();
 }

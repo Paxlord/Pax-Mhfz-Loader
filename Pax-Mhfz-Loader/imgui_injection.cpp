@@ -121,8 +121,10 @@ void IMGuiInjection::hookEndScene() {
     pD3D->Release();
 }
 
-void IMGuiInjection::getWindowHandle() {
+HWND IMGuiInjection::getWindowHandle() {
     do {
         window = GetProcessWindow();
     } while (window == NULL);
+
+    return window;
 }
