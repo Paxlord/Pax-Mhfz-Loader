@@ -18,6 +18,7 @@ HINSTANCE dll_handle;
 HANDLE loader_thread;
 int mhfdll_addy = 0;
 const int VERSION = 1;
+const bool no_lge = true;
 
 //See Thread Walking page of the MDN Docs
 std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
@@ -53,16 +54,36 @@ std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
 
 DWORD __stdcall EjectThread(LPVOID lpParameter) {
     Sleep(100);
+    if (no_lge)
+        TerminateProcess(GetCurrentProcess(), 0);
     FreeLibraryAndExitThread(dll_handle, 0);
     return 0;
 }
 
-void SetMhfDllAddy() {
+bool SetMhfDllAddy() {
     //Getting the main dll adress
+    DWORD lge_addy;
+
     do {
         mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
+        lge_addy = (DWORD)GetModuleHandleA("mhfo.dll");
+        if (lge_addy) {
+            break;
+        }
         Sleep(50);
     } while (!mhfdll_addy);
+
+    if (lge_addy) {
+        if (!no_lge) {
+            MessageBoxA(NULL, "Low-Grade Edition isn't supported by this mod loader, please launch the game using High-Grade Edition if you want mods to be loaded.", "LGE Detected", MB_ICONWARNING | MB_OK);
+        }
+        else {
+            MessageBoxA(NULL, "This server decided to not support Low-Grade Edition, please launch the game in High-Grade Edition to play.", "LGE Detected", MB_ICONWARNING | MB_OK);
+        }
+        return false;
+    }
+
+    return true;
 }
 
 void ModManagerInit() {
@@ -82,22 +103,28 @@ DWORD WINAPI Loader(HMODULE base) {
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
-
-    SetMhfDllAddy();
-    std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
-
+    
     for (const auto handle : list) {
         SuspendThread(handle);
     }
 
-    ModManagerInit();
+    if (SetMhfDllAddy()) {
+        std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
 
-    for (const auto handle : list) {
-        ResumeThread(handle);
+        ModManagerInit();
+
+        for (const auto handle : list) {
+            ResumeThread(handle);
+        }
+
+        while (true) {
+            Sleep(50);
+        }
     }
-
-    while (true) {
-        Sleep(50);
+    else {
+        for (const auto handle : list) {
+            ResumeThread(handle);
+        }
     }
 
     Sleep(1000);
