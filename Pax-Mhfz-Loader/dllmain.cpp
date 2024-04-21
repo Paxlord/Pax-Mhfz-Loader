@@ -19,6 +19,7 @@ HINSTANCE dll_handle;
 HANDLE loader_thread;
 int mhfdll_addy = 0;
 
+//See Thread Walking page of the MDN Docs
 std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
 
     HANDLE hthreadsnapshot = INVALID_HANDLE_VALUE;
