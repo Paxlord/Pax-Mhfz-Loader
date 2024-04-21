@@ -1,4 +1,3 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include <Windows.h>
 #include <stdlib.h>
 #include <iostream>
@@ -84,7 +83,7 @@ DWORD WINAPI Loader(HMODULE base) {
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
 
     SetMhfDllAddy();
-    std::cout << "mhfo-hd.dll addy found : " << dye::purple(mhfdll_addy) << std::endl;
+    std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
 
     for (const auto handle : list) {
         SuspendThread(handle);
