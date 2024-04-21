@@ -18,7 +18,7 @@ HINSTANCE dll_handle;
 HANDLE loader_thread;
 int mhfdll_addy = 0;
 const int VERSION = 1;
-const bool no_lge = true;
+const bool no_lge = false;
 
 //See Thread Walking page of the MDN Docs
 std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
