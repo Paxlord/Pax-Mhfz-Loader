@@ -64,6 +64,12 @@ void SetMhfDllAddy() {
     } while (!mhfdll_addy);
 }
 
+void ModManagerInit() {
+    ModManager::GetInstance()->AttachAll();
+    IMGuiInjection::hookEndScene();
+    ModManager::GetInstance()->HookUpdates();
+}
+
 DWORD WINAPI Loader(HMODULE base) {
 
     //Get the main mhfz window handle before anything else
@@ -75,8 +81,6 @@ DWORD WINAPI Loader(HMODULE base) {
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
-    std::cout << "Loader thread " << GetThreadId(GetCurrentThread()) << std::endl;
-
 
     SetMhfDllAddy();
     std::cout << "mhfo-hd.dll addy found : " << dye::purple(mhfdll_addy) << std::endl;
@@ -85,9 +89,7 @@ DWORD WINAPI Loader(HMODULE base) {
         SuspendThread(handle);
     }
 
-    ModManager::GetInstance()->AttachAll();
-    IMGuiInjection::hookEndScene();
-    ModManager::GetInstance()->HookUpdates();
+    ModManagerInit();
 
     for (const auto handle : list) {
         ResumeThread(handle);
