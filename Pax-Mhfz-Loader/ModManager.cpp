@@ -59,7 +59,11 @@ ModManager::ModManager() {
 			continue;
 		}
 
-		std::cout << "Loaded mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
+		std::cout << "Found mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
+		if (mod->required_version > VERSION) {
+			std::cout << "Missmatched version between loader (" << VERSION << ") and " << mod->name << " required version (" << mod->required_version << ") Please update the loader to run this mod." << std::endl;
+			continue;
+		}
 		mod_list.push_back(mod);
 	}
 
