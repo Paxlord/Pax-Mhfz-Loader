@@ -11,7 +11,7 @@ _(Please note that creating mods in this game requires some decent knowledge of 
 
 ## Installation
 
-Drop ```pax.dll``` and ```version.dll``` inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
+Drop the content of the ```paxloader.zip``` archive inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
 
 ## Features
 
