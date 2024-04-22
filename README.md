@@ -8,6 +8,9 @@ This loader uses a plugin architecture to dynamically load compatible mods prese
 
 **CAUTION : This loader only and will only support High-grade edition, if you try to run this loader with Low-Grade edition you will either completely crash or not load anything.** 
 
+## Installation
+
+drop "pax.dll" and "version.dll" inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
 
 ## Features
 
