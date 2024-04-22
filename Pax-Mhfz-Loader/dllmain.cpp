@@ -91,6 +91,9 @@ void ModManagerInit() {
 
 DWORD WINAPI Loader(HMODULE base) {
 
+    //Version.dll injects on launcher startup, so we're setting the thread in an infinite loop until the actual game is launched
+    SetMhfDllAddy();
+
     //Get the main mhfz window handle before anything else
     HWND main_window = IMGuiInjection::getWindowHandle();
 
