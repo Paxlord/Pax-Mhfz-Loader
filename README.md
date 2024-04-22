@@ -2,7 +2,8 @@
 
 This is a general-purpose mod loader for Monster hunter frontier Z.
 
-This loader uses a plugin architecture to dynamically load compatible mods present in the "/mods" folder in the main game folder. For more information about potentially creating your own mods please check this repo : 
+This loader uses a plugin architecture to dynamically load compatible mods present in the "/mods" folder in the main game folder. For more information about potentially creating your own mods please check this repo : (link to come)
+
 (Please note that creating mods in this game requires some decent knowledge of C++ and x86 ASM, and even if this loader makes it easier it's still really hard to do.)
 
 **CAUTION : This loader only and will only support High-grade edition, if you try to run this loader with Low-Grade edition you will either completely crash or not load anything.** 
