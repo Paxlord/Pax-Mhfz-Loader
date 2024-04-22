@@ -1,9 +1,9 @@
 # Pax's MHFZ Mod Loader
 
-This is a general-purpose mod loader for Monster hunter frontier Z.
+General-purpose mod loader for Monster hunter frontier Z.
 
 This loader uses a plugin architecture to dynamically load compatible mods present in the "/mods" folder in the main game folder. For more information about potentially creating your own mods please check this repo : [paxloader-basemod](https://github.com/Paxlord/paxloader-basemod)
-(Please note that creating mods in this game requires some decent knowledge of C++ and x86 ASM, and even if this loader makes it easier it's still really hard to do.)
+_(Please note that creating mods in this game requires some decent knowledge of C++ and x86 ASM, and even if this loader makes it easier it's still really hard to do.)_
 
 If you encounter any issue with the loader or any of my mods, feel free to raise an issue or shoot me a dm on Discord at @pax_777
 
@@ -11,7 +11,7 @@ If you encounter any issue with the loader or any of my mods, feel free to raise
 
 ## Installation
 
-drop "pax.dll" and "version.dll" inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
+Drop ```pax.dll``` and ```version.dll``` inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
 
 ## Features
 
