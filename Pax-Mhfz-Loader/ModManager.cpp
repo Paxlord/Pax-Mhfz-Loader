@@ -3,6 +3,8 @@
 
 #include <fstream>
 #include <typeinfo>
+#include <unordered_set>
+#include <map>
 	
 namespace fs = std::filesystem;
 
@@ -66,12 +68,11 @@ ModManager::ModManager() {
 		}
 
 		std::cout << "Found mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
-		if (mod->required_version > VERSION) {
-			std::cout << "Missmatched version between loader (" << VERSION << ") and " << mod->name << " required version (" << mod->required_version << ") Please update the loader to run this mod." << std::endl;
-			continue;
-		}
-		mod_list.push_back(mod);
+		if(CheckModValidity(mod))
+			mod_list.push_back(mod);
 	}
+
+	CheckRequired();
 
 }
 
@@ -161,12 +162,63 @@ bool ModManager::CheckModValidity(Mod* mod) {
 
 	//Check for allowed
 	if (allowed.size() > 0) {
-		for (const auto map : allowed) {
-			
+		bool is_in = false;
+		for (const auto &mod_entry : allowed) {
+			if (mod_entry->name == mod->name) {
+				is_in = true;
+
+				if (mod_entry->version != mod->version && mod_entry->version != "any") {
+					std::cout << "Missmatched mod version in allowed list for mod " << mod->name << " only version " << mod_entry->version << " is allowed. But found " << mod->version << std::endl;
+					return false;
+				}
+
+				break;
+			}
 		}
+
+		if (!is_in) {
+			std::cout << "Allowed mod list set but mod " << mod->name << " isn't in it." << std::endl;
+			return false;
+		}
+	}
+
+	if (mod->hge_only && !NO_LGE) {
+		std::cout << "Mod " << mod->name << " has the hge_only flag enabled but this loader isn't set as no_lge." << std::endl;
+		return false;
 	}
 
 
 	return true;
 }
 
+void ModManager::CheckRequired() {
+	
+	if (required.size() <= 0) return;
+	//Generate a set of all loaded mod names
+	std::unordered_set<std::string> set;
+	std::map<std::string, std::string> mod_list_version_lookup;
+
+	for (const auto& mod : mod_list) {
+		set.insert(mod->name);
+		mod_list_version_lookup.insert({ mod->name, mod->version });
+	}
+
+	for (const auto& required_mod : required) {
+
+		if (set.find(required_mod->name) == set.end()) {
+			std::string str = "Required mod : " + required_mod->name + " isn't loaded. Terminating...";
+			MessageBoxA(NULL, str.c_str(), "Required list error", MB_ICONWARNING | MB_OK);
+			Sleep(100);
+			TerminateProcess(GetCurrentProcess(), 0);
+		}
+
+		if (required_mod->version != "any" && mod_list_version_lookup[required_mod->name] != required_mod->version) {
+			std::string str = "Version mismatch for required mod : " + required_mod->name + " version " + required_mod->version + " needed.";
+			MessageBoxA(NULL, str.c_str(), "Required list error", MB_ICONWARNING | MB_OK);
+			Sleep(100);
+			TerminateProcess(GetCurrentProcess(), 0);
+		}
+
+	}
+
+}

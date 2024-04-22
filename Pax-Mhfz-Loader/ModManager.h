@@ -4,7 +4,6 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
-#include <map>
 #include <MinHook.h>
 #include <json.hpp>
 
@@ -41,5 +40,6 @@ public:
 	void LoadConfig();
 	void ParseConfigArray(json config_json, std::string array_key, std::vector<Mod_Config_List*> &dest_array);
 	bool CheckModValidity(Mod* mod);
+	void CheckRequired();
 };
 
