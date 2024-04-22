@@ -4,19 +4,29 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <map>
 #include <MinHook.h>
+#include <json.hpp>
 
 #include "imgui/imgui.h"
 #include "globals.h"
 #include "mod.h"
 
+using json = nlohmann::json;
+
 typedef Mod* ( *t_createMod)();
 typedef void (*t_setDllAddy)(int);
+
+typedef struct {
+	std::string name;
+	std::string version;
+} Mod_Config_List;
 
 class ModManager
 {
 private:
 	std::vector<Mod*> mod_list;
+	std::vector<Mod_Config_List*> required, allowed;
 	static ModManager* instance;
 	ModManager();
 public:
@@ -27,5 +37,9 @@ public:
 	void InitializeImGUICtx(ImGuiContext* ctx);
 	void DrawModMenu();
 	void HookUpdates();
+
+	void LoadConfig();
+	void ParseConfigArray(json config_json, std::string array_key, std::vector<Mod_Config_List*> &dest_array);
+	bool CheckModValidity(Mod* mod);
 };
 

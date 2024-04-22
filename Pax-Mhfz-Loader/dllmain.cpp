@@ -51,7 +51,7 @@ std::vector<HANDLE> ListProcessThreads(DWORD dwOwnerPID) {
 
 DWORD __stdcall EjectThread(LPVOID lpParameter) {
     Sleep(100);
-    if (no_lge)
+    if (NO_LGE)
         TerminateProcess(GetCurrentProcess(), 0);
     FreeLibraryAndExitThread(dll_handle, 0);
     return 0;
@@ -71,7 +71,7 @@ bool SetMhfDllAddy() {
     } while (!mhfdll_addy);
 
     if (lge_addy) {
-        if (!no_lge) {
+        if (!NO_LGE) {
             MessageBoxA(NULL, "Low-Grade Edition isn't supported by this mod loader, please launch the game using High-Grade Edition if you want mods to be loaded.", "LGE Detected", MB_ICONWARNING | MB_OK);
         }
         else {
