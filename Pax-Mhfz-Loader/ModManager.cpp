@@ -114,6 +114,15 @@ void ModManager::DetachAll() {
 
 void ModManager::DrawModMenu() {
 	ImGui::Begin("Mod Menu");
+	ImGui::Text("Press F12 to hide/show the menu!");
+
+	if (ImGui::CollapsingHeader("Mod List")) {
+		ImGui::Text("%d Active mods", mod_list.size());
+		for (const auto& mod : mod_list) {
+			ImGui::Text("%s - v.%s", mod->name.c_str(), mod->version.c_str());
+		}
+	}
+
 	for (const auto& mod: mod_list) {
 		if (ImGui::CollapsingHeader(mod->display_name.c_str())) {
 			mod->DrawUI();
@@ -194,6 +203,12 @@ bool ModManager::CheckModValidity(Mod* mod) {
 void ModManager::CheckRequired() {
 	
 	if (required.size() <= 0) return;
+	if (mod_list.size() < required.size()) {
+		std::string str = "Required list has more mods than loaded mod list. Terminating...";
+		MessageBoxA(NULL, str.c_str(), "Required list error", MB_ICONWARNING | MB_OK);
+		Sleep(100);
+		TerminateProcess(GetCurrentProcess(), 0);
+	}
 	//Generate a set of all loaded mod names
 	std::unordered_set<std::string> set;
 	std::map<std::string, std::string> mod_list_version_lookup;
