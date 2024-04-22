@@ -7,7 +7,7 @@ _(Please note that creating mods in this game requires some decent knowledge of 
 
 If you encounter any issue with the loader or any of my mods, feel free to raise an issue or shoot me a dm on Discord at @pax_777
 
-# **CAUTION : This loader only and will only support High-grade edition, if you try to run this loader with Low-Grade edition you will either completely crash or not load anything.** 
+### **CAUTION : This loader only and will only support High-grade edition, if you try to run this loader with Low-Grade edition you will either completely crash or not load anything.** 
 
 ## Installation
 
