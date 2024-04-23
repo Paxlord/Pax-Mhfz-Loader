@@ -103,13 +103,18 @@ DWORD WINAPI Loader(HMODULE base) {
     freopen_s(&fp, "CONOUT$", "w", stdout);
 
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
-    
-    for (const auto handle : list) {
-        SuspendThread(handle);
-    }
 
     if (SetMhfDllAddy()) {
         std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
+
+        //Infinite loop until the game manager is initialized
+        do {
+            Sleep(50);
+        } while (*(DWORD*)(mhfdll_addy + 0xE7FFF3C) == 0);
+
+        for (const auto handle : list) {
+            SuspendThread(handle);
+        }
 
         ModManagerInit();
 
@@ -119,11 +124,6 @@ DWORD WINAPI Loader(HMODULE base) {
 
         while (true) {
             Sleep(50);
-        }
-    }
-    else {
-        for (const auto handle : list) {
-            ResumeThread(handle);
         }
     }
 
