@@ -40,6 +40,9 @@ ModManager::ModManager() {
 	LoadConfig();
 
 	std::string mod_folder = "./mods";
+
+	if (!fs::exists(fs::status(mod_folder))) return;
+
 	for (const auto& entry : fs::directory_iterator(mod_folder)) {
 		std::string file_extension = entry.path().extension().generic_string();
 		if (file_extension != ".dll") continue;
