@@ -36,17 +36,19 @@ If a config.json file is present in the same folder as pax.dll. The loader will 
 
 ```js
 {
-//Used to check if the loader should actively close the game if LGE is detected
-"no_lge":  false,
-
-//Required allow you to set a list of mods that have to be loaded or the client will be closed
-"required": [
-{ "name"  :  "weapon-unbloater", "version":  "0.1.1" }
-{ "name"  :  "camera-tweaker", "version":  "any" },],
-
-//Allowed acts like a "white-list" of mods that are allowed but not required.
-"allowed": [
-{ "name"  :  "weapon-unbloater", "version":  "0.1.1" }
-{ "name"  :  "camera-tweaker", "version":  "any" },]
+  //Used to check if the loader should actively close the game if LGE is detected
+  "no_lge":  false,
+  
+  //Required allow you to set a list of mods that have to be loaded or the client will be closed
+  "required": [
+    { "name"  :  "weapon-unbloater", "version":  "0.1.1" },
+    { "name"  :  "camera-tweaker", "version":  "any" }
+  ],
+  
+  //Allowed acts like a "white-list" of mods that are allowed but not required.
+  "allowed": [
+    { "name"  :  "weapon-unbloater", "version":  "0.1.1" },
+    { "name"  :  "camera-tweaker", "version":  "any" }
+  ]
 }
 ```
