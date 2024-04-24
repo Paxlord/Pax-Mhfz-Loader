@@ -35,6 +35,9 @@ Drop the content of the ```paxloader.zip``` archive inside your mhfz folder. Whe
 
 Simply delete or remove ```pax.dll``` and ```version.dll``` from the game's folder.
 
+### Update
+
+Unless specified otherwise you should only have to replace ```pax.dll``` with the new one to update.
 
 ## Contributing
 
