@@ -18,7 +18,7 @@ _(Please note that creating mods in this game requires some decent knowledge of 
 - Possibility to define a required mod list 
 - Possibility to allow specific mods
 
-### Future Features
+### Future plans
 
 At this point, I feel like the loader is in a pretty good spot and can do its job just fine. Here's a few missing features that I'm planning or thinking about : 
 - I have not yet found a decent "Update" function that would run only while in the lobby and could be hooked without too much side-effects
