@@ -1,7 +1,10 @@
 #include "imgui_injection.h"
+#include <fstream>
 
 typedef HRESULT(__stdcall* EndScene)(IDirect3DDevice9* pDevice);
+typedef HRESULT(APIENTRY* Reset)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
 EndScene pEndScene;
+Reset oReset;
 
 WNDPROC oWndProc;
 HWND window;
@@ -42,6 +45,7 @@ void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
 
 
 HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
+    
     if (!init) {
         InitImGUI(pDevice);
         init = true;
@@ -50,7 +54,7 @@ HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-
+    
     if (GetAsyncKeyState(VK_F12) & 1)
         showMenu = !showMenu;
 
@@ -58,12 +62,20 @@ HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
     if (showMenu == true && mhfdll_addy) {
         ModManager::GetInstance()->DrawModMenu();
     }
-
+    
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
+    
     return pEndScene(pDevice);
+}
+
+HRESULT APIENTRY hkReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    HRESULT hr = oReset(pDevice, pPresentationParameters);
+    ImGui_ImplDX9_CreateDeviceObjects();
+    return hr;
 }
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -113,6 +125,9 @@ void IMGuiInjection::hookEndScene() {
         std::cout << "Failed to enable hook" << std::endl;
         return;
     }
+
+    MH_CreateHook(vTable[16], &hkReset, reinterpret_cast<void**>(&oReset));
+    MH_EnableHook(vTable[16]);
 
     std::cout << "Imgui Injection complete!" << std::endl;
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWL_WNDPROC, (LONG_PTR)WndProc);
