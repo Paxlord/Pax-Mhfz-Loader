@@ -9,14 +9,6 @@ _(Please note that creating mods in this game requires some decent knowledge of 
 
 ### **CAUTION : This loader only and will only support High-grade edition, if you try to run it with Low-Grade edition you will either completely crash or not load anything.** 
 
-## Installation
-
-Drop the content of the ```paxloader.zip``` archive inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
-
-## Uninstalling
-
-Simply delete or remove ```pax.dll``` and ```version.dll``` from the game's folder.
-
 ## Features
 
 - Dynamic loading of compatible mods
@@ -26,13 +18,33 @@ Simply delete or remove ```pax.dll``` and ```version.dll``` from the game's fold
 - Possibility to define a required mod list 
 - Possibility to allow specific mods
 
+### Future Features
+
+At this point, I feel like the loader is in a pretty good spot and can do its job just fine. Here's a few missing features that I'm planning or thinking about : 
+- I have not yet found a decent "Update" function that would run only while in the lobby and could be hooked without too much side-effects
+- Better memory cleanup, I'm not a c++ dev so i'm still figuring out the whole cleaning-up your own memory part.
+- I'm tinkering with the possibility to have the loader hit a /get endpoint on the current running server adress to get the config. This would remove any possibility from a malicious player to tinker with the way the loader is loading mods.
+- More config options as they come up...
+
+## How to use
+### Installation
+
+Drop the content of the ```paxloader.zip``` archive inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
+
+### Uninstallation
+
+Simply delete or remove ```pax.dll``` and ```version.dll``` from the game's folder.
+
+
 ## Contributing
 
-I'm not a C++ dev. So the code might not be as clean and readable as it could be. Contribution are more than welcome same for feature suggestions.
+I'm not by any means a C++ dev, the code might not be as clean and readable as it could be. Despite that, any contribution is more than welcome, same goes for feature suggestions.
 
-## Config.json
+## Configuration
 
-If a config.json file is present in the same folder as pax.dll. The loader will read it. Here is an example config :
+If a ```config.json``` file is located in the same folder as the main pax.dll. The loader will read it and look for some config options. 
+
+Here is an example config :
 
 ```js
 {
