@@ -65,20 +65,10 @@ bool SetMhfDllAddy() {
         mhfdll_addy = (DWORD)GetModuleHandleA("mhfo-hd.dll");
         lge_addy = (DWORD)GetModuleHandleA("mhfo.dll");
         if (lge_addy) {
-            break;
+            return false;
         }
         Sleep(50);
     } while (!mhfdll_addy);
-
-    if (lge_addy) {
-        if (!NO_LGE) {
-            MessageBoxA(NULL, "Low-Grade Edition isn't supported by this mod loader, please launch the game using High-Grade Edition if you want mods to be loaded.", "LGE Detected", MB_ICONWARNING | MB_OK);
-        }
-        else {
-            MessageBoxA(NULL, "This server decided to not support Low-Grade Edition, please launch the game in High-Grade Edition to play.", "LGE Detected", MB_ICONWARNING | MB_OK);
-        }
-        return false;
-    }
 
     return true;
 }
@@ -124,6 +114,23 @@ DWORD WINAPI Loader(HMODULE base) {
 
         while (true) {
             Sleep(50);
+        }
+    }
+    else {
+
+        for (const auto handle : list) {
+            SuspendThread(handle);
+        }
+
+        if (!NO_LGE) {
+            MessageBoxA(NULL, "Low-Grade Edition isn't supported by this mod loader, please launch the game using High-Grade Edition if you want mods to be loaded.", "LGE Detected", MB_ICONWARNING | MB_OK);
+        }
+        else {
+            MessageBoxA(NULL, "This server decided to not support Low-Grade Edition, please launch the game in High-Grade Edition to play.", "LGE Detected", MB_ICONERROR | MB_OK);
+        }
+
+        for (const auto handle : list) {
+            ResumeThread(handle);
         }
     }
 
