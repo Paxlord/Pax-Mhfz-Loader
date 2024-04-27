@@ -75,8 +75,19 @@ bool SetMhfDllAddy() {
 
 void ModManagerInit() {
     ModManager::GetInstance()->AttachAll();
-    IMGuiInjection::hookEndScene();
     ModManager::GetInstance()->HookUpdates();
+}
+
+void SuspendThreads(std::vector<HANDLE> list) {
+    for (const auto handle : list) {
+        SuspendThread(handle);
+    }
+}
+
+void ResumeThreads(std::vector<HANDLE> list) {
+    for (const auto handle : list) {
+        ResumeThread(handle);
+    }
 }
 
 DWORD WINAPI Loader(HMODULE base) {
@@ -96,32 +107,29 @@ DWORD WINAPI Loader(HMODULE base) {
 
     if (SetMhfDllAddy()) {
         std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
+        
+        //First suspension to initialize the loader itself
+        SuspendThreads(list);
+        ModManager::GetInstance();
+        IMGuiInjection::hookEndScene();
+        ResumeThreads(list);
 
         //Infinite loop until the game manager is initialized
         do {
             Sleep(50);
         } while (*(DWORD*)(mhfdll_addy + 0xE7FFF3C) == 0);
 
-        for (const auto handle : list) {
-            SuspendThread(handle);
-        }
-
+        //Second suspension after the game initialized to run mods attach function
+        SuspendThreads(list);
         ModManagerInit();
-
-        for (const auto handle : list) {
-            ResumeThread(handle);
-        }
+        ResumeThreads(list);
 
         while (true) {
             Sleep(50);
         }
     }
     else {
-
-        for (const auto handle : list) {
-            SuspendThread(handle);
-        }
-
+        
         if (!NO_LGE) {
             MessageBoxA(NULL, "Low-Grade Edition isn't supported by this mod loader, please launch the game using High-Grade Edition if you want mods to be loaded.", "LGE Detected", MB_ICONWARNING | MB_OK);
         }
@@ -129,9 +137,6 @@ DWORD WINAPI Loader(HMODULE base) {
             MessageBoxA(NULL, "This server decided to not support Low-Grade Edition, please launch the game in High-Grade Edition to play.", "LGE Detected", MB_ICONERROR | MB_OK);
         }
 
-        for (const auto handle : list) {
-            ResumeThread(handle);
-        }
     }
 
     Sleep(1000);
