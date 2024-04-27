@@ -6,6 +6,7 @@
 #include <string>
 #include <MinHook.h>
 #include <json.hpp>
+#include <ini.h>
 
 #include "imgui/imgui.h"
 #include "globals.h"
