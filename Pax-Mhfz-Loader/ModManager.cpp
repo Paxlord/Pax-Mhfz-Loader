@@ -37,6 +37,18 @@ std::vector<Mod*> ModManager::GetModList() {
 	return mod_list;
 }
 
+void LoadINIConfig() {
+	mINI::INIFile imgui("./imgui.ini");
+	mINI::INIStructure ini_imgui;
+
+	imgui.read(ini_imgui);
+
+	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
+	if (!dont_show_val.empty())
+		dont_show = std::stoi(dont_show_val) != 0;
+}
+
+
 ModManager::ModManager() {
 
 	LoadConfig();
@@ -261,13 +273,3 @@ void ModManager::CheckRequired() {
 
 }
 
-void LoadINIConfig() {
-	mINI::INIFile imgui("./imgui.ini");
-	mINI::INIStructure ini_imgui;
-
-	imgui.read(ini_imgui);
-
-	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
-	if (!dont_show_val.empty())
-		dont_show = std::stoi(dont_show_val) != 0;
-}
