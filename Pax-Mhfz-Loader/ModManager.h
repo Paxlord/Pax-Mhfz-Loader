@@ -9,7 +9,7 @@
 
 #include "imgui/imgui.h"
 #include "globals.h"
-#include "mod.h"
+#include "../paxloader-basemod/BaseMod/mod.h"
 
 using json = nlohmann::json;
 
