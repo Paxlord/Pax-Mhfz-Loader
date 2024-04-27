@@ -15,4 +15,5 @@
 namespace IMGuiInjection{
 	void hookEndScene();
 	HWND getWindowHandle();
+	void* CreateDx9Tex(std::string);
 }

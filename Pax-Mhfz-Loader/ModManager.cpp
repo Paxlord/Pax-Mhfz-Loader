@@ -1,5 +1,6 @@
 #include "ModManager.h"
 #include "color.hpp"
+#include "imgui_injection.h";
 
 #include <fstream>
 #include <typeinfo>
@@ -134,9 +135,10 @@ void ModManager::DrawModMenu() {
 	ImGui::End();
 }
 
-void ModManager::InitializeImGUICtx(ImGuiContext* ctx) {
+void ModManager::InitializeImGUI(ImGuiContext* ctx) {
 	for (const auto& mod : mod_list) {
 		mod->InitImGUIContext(ctx);
+		mod->SetCreateImageData(IMGuiInjection::CreateDx9Tex);
 	}
 }
 

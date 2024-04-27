@@ -10,6 +10,8 @@ WNDPROC oWndProc;
 HWND window;
 
 LPD3DXFONT pFont;
+LPDIRECT3DDEVICE9 game_pDevice;
+
 bool init = false;
 bool showMenu = true;
 bool initImgui = false;
@@ -34,7 +36,8 @@ HWND GetProcessWindow() {
 void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
     ImGui::CreateContext();
 
-    ModManager::GetInstance()->InitializeImGUICtx(ImGui::GetCurrentContext());
+    ModManager::GetInstance()->InitializeImGUI(ImGui::GetCurrentContext());
+    game_pDevice = lpDevice;
 
     ImGuiIO& io = ImGui::GetIO();
     //io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
@@ -142,4 +145,15 @@ HWND IMGuiInjection::getWindowHandle() {
     } while (window == NULL);
 
     return window;
+}
+
+void* IMGuiInjection::CreateDx9Tex(std::string tex_path) {
+    PDIRECT3DTEXTURE9 pTexture = NULL;
+    std::cout << tex_path << std::endl;
+    HRESULT hr = D3DXCreateTextureFromFileA(game_pDevice, tex_path.c_str(), &pTexture);
+    if (FAILED(hr)) {
+        std::cout << "Failed to create texture with code " << std::hex << hr << std::dec << std::endl;
+        return NULL;
+    }
+    return reinterpret_cast<void*>(pTexture);
 }

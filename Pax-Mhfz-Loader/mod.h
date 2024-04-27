@@ -3,7 +3,12 @@
 #include <string>
 #include "imgui/imgui.h"
 
+typedef void* (*createImageData)(std::string);
+
 class Mod {
+protected:
+	createImageData CreateImage;
+
 public:
 	std::string name;
 	std::string display_name;
@@ -17,6 +22,10 @@ public:
 		this->required_version = required_version;
 		this->version = version;
 		this->hge_only = hge_only;
+	}
+
+	void SetCreateImageData(createImageData func) {
+		this->CreateImage = func;
 	}
 
 	virtual void InitImGUIContext(ImGuiContext* ctx) = 0;
