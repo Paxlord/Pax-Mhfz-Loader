@@ -1,6 +1,7 @@
 #include "ModManager.h"
 #include "color.hpp"
 #include "imgui_injection.h";
+#include <ini.h>
 
 #include <fstream>
 #include <typeinfo>
@@ -8,7 +9,7 @@
 #include <map>
 	
 namespace fs = std::filesystem;
-
+bool dont_show = false;
 
 typedef int(__thiscall* game_core)();
 game_core gc;
@@ -102,6 +103,15 @@ void ModManager::LoadConfig() {
 		std::cout << allow->name << ": " << allow->version << ", ";
 		std::cout << std::endl;
 	}
+
+	mINI::INIFile imgui("./imgui.ini");
+	mINI::INIStructure ini_imgui;
+
+	imgui.read(ini_imgui);
+
+	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
+	if (!dont_show_val.empty())
+		dont_show = std::stoi(dont_show_val) != 0;
 }
 
 void ModManager::AttachAll() {
@@ -125,6 +135,13 @@ void ModManager::OnInitImGUIAll() {
 void ModManager::DrawModMenu() {
 	ImGui::Begin("Mod Menu");
 	ImGui::Text("Press F12 to hide/show the menu!");
+
+	if (ImGui::Checkbox("Hide on startup", &dont_show)) {
+		mINI::INIFile imgui("./imgui.ini");
+		mINI::INIStructure ini_imgui;
+		ini_imgui["Mod Menu Config"]["dont_show"] = dont_show ? "1" : "0";
+		imgui.write(ini_imgui, true);
+	}
 
 	if (ImGui::CollapsingHeader("Mod List")) {
 		ImGui::Text("%d Active mods", mod_list.size());

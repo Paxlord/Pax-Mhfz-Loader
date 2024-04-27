@@ -1,5 +1,6 @@
 #include "imgui_injection.h"
 #include <fstream>
+#include <ini.h>
 
 typedef HRESULT(__stdcall* EndScene)(IDirect3DDevice9* pDevice);
 typedef HRESULT(APIENTRY* Reset)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
@@ -45,6 +46,15 @@ void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX9_Init(lpDevice);
     io.ImeWindowHandle = window;
+
+    mINI::INIFile imgui("./imgui.ini");
+    mINI::INIStructure ini_imgui;
+
+    imgui.read(ini_imgui);
+
+    auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
+    if(!dont_show_val.empty())
+        showMenu = !(std::stoi(dont_show_val) != 0);
 }
 
 
