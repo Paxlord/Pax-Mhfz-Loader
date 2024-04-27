@@ -40,6 +40,7 @@ std::vector<Mod*> ModManager::GetModList() {
 ModManager::ModManager() {
 
 	LoadConfig();
+	LoadINIConfig();
 
 	std::string mod_folder = "./mods";
 
@@ -104,14 +105,7 @@ void ModManager::LoadConfig() {
 		std::cout << std::endl;
 	}
 
-	mINI::INIFile imgui("./imgui.ini");
-	mINI::INIStructure ini_imgui;
-
-	imgui.read(ini_imgui);
-
-	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
-	if (!dont_show_val.empty())
-		dont_show = std::stoi(dont_show_val) != 0;
+	f.close();
 }
 
 void ModManager::AttachAll() {
@@ -139,6 +133,7 @@ void ModManager::DrawModMenu() {
 	if (ImGui::Checkbox("Hide on startup", &dont_show)) {
 		mINI::INIFile imgui("./imgui.ini");
 		mINI::INIStructure ini_imgui;
+		imgui.read(ini_imgui);
 		ini_imgui["Mod Menu Config"]["dont_show"] = dont_show ? "1" : "0";
 		imgui.write(ini_imgui, true);
 	}
@@ -264,4 +259,15 @@ void ModManager::CheckRequired() {
 
 	}
 
+}
+
+void LoadINIConfig() {
+	mINI::INIFile imgui("./imgui.ini");
+	mINI::INIStructure ini_imgui;
+
+	imgui.read(ini_imgui);
+
+	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
+	if (!dont_show_val.empty())
+		dont_show = std::stoi(dont_show_val) != 0;
 }
