@@ -33,6 +33,7 @@ public:
 	std::vector<Mod*> GetModList();
 	void AttachAll();
 	void DetachAll();
+	void OnInitImGUIAll();
 	void InitializeImGUI(ImGuiContext* ctx);
 	void DrawModMenu();
 	void HookUpdates();

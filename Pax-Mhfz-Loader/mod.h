@@ -30,14 +30,18 @@ public:
 
 	virtual void InitImGUIContext(ImGuiContext* ctx) = 0;
 	//Will run once at game start, where you initialize things like hooks
-	virtual void Attach() = 0;
+	virtual void OnAttach() = 0;
 	//Will run once on detach, used to clean up memory if needed
-	virtual void Detach() = 0;
+	virtual void OnDetach() = 0;
+	//Will run every frame in the main update function in quests
+	virtual void OnUpdateQuest() {};
+	//WIll run every frame in the main update function in the lobby
+	virtual void OnUpdateLobby() {};
+	//Will run once the global ImGui Context has been initialized
+	virtual void OnImGUIInit() = 0;
+	
 	//Linked to the main injected imgui context, can draw whatever here
 	virtual void DrawUI() {};
-	//Will run every frame in the main update function in quests
-	virtual void UpdateQuest() {};
-	//WIll run every frame in the main update function in the lobby
-	virtual void UpdateLobby() {};
+
 };
 

@@ -17,7 +17,7 @@ DWORD game_core_addy = 0x89BE10;
 int hk_game_core() {
 	
 	for (const auto& mod : ModManager::GetInstance()->GetModList()) {
-		mod->UpdateQuest();
+		mod->OnUpdateQuest();
 	}
 
 	return gc();
@@ -106,7 +106,7 @@ void ModManager::LoadConfig() {
 
 void ModManager::AttachAll() {
 	for (const auto& mod : mod_list) {
-		mod->Attach();
+		mod->OnAttach();
 	}
 	std::cout << "Attached " << mod_list.size() << " mods successfully." << std::endl;
 
@@ -114,6 +114,12 @@ void ModManager::AttachAll() {
 
 void ModManager::DetachAll() {
 
+}
+
+void ModManager::OnInitImGUIAll() {
+	for (const auto& mod : mod_list) {
+		mod->OnImGUIInit();
+	}
 }
 
 void ModManager::DrawModMenu() {

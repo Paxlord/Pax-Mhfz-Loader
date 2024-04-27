@@ -106,7 +106,7 @@ DWORD WINAPI Loader(HMODULE base) {
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
 
     if (SetMhfDllAddy()) {
-        std::cout << "mhfo-hd.dll address found: 0x" << std::hex << dye::purple(mhfdll_addy) << std::dec << std::endl;
+        std::cout << "mhfo-hd.dll address found: 0x" << std::hex << mhfdll_addy << std::dec << std::endl;
         
         //First suspension to initialize the loader itself
         SuspendThreads(list);
@@ -124,6 +124,7 @@ DWORD WINAPI Loader(HMODULE base) {
         ModManagerInit();
         ResumeThreads(list);
 
+        //Infinite loop to keep this thread up
         while (true) {
             Sleep(50);
         }

@@ -38,6 +38,7 @@ void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
 
     ModManager::GetInstance()->InitializeImGUI(ImGui::GetCurrentContext());
     game_pDevice = lpDevice;
+    ModManager::GetInstance()->OnInitImGUIAll();
 
     ImGuiIO& io = ImGui::GetIO();
     //io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
