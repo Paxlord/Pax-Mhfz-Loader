@@ -76,6 +76,10 @@ HRESULT __stdcall hkEndScene(IDirect3DDevice9* pDevice) {
     if (showMenu == true && mhfdll_addy) {
         ModManager::GetInstance()->DrawModMenu();
     }
+
+    if (mhfdll_addy) {
+        ModManager::GetInstance()->DrawOverlay(showMenu);
+    }
     
     ImGui::EndFrame();
     ImGui::Render();

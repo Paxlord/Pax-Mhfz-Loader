@@ -36,6 +36,7 @@ public:
 	void OnInitImGUIAll();
 	void InitializeImGUI(ImGuiContext* ctx);
 	void DrawModMenu();
+	void DrawOverlay(bool show_menu);
 	void HookUpdates();
 
 	void LoadConfig();

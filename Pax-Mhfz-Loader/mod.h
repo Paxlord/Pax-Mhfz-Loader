@@ -42,6 +42,7 @@ public:
 	virtual void OnImGUIInit() = 0;
 
 	//Linked to the main injected imgui context, can draw whatever here
-	virtual void DrawUI() {};
+	virtual void DrawModMenu() {};
+	virtual void DrawUI(bool show_menu) {};
 
 };

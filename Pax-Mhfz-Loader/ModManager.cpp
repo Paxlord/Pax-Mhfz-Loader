@@ -159,10 +159,16 @@ void ModManager::DrawModMenu() {
 
 	for (const auto& mod: mod_list) {
 		if (ImGui::CollapsingHeader(mod->display_name.c_str())) {
-			mod->DrawUI();
+			mod->DrawModMenu();
 		}
 	}
 	ImGui::End();
+}
+
+void ModManager::DrawOverlay(bool show_menu) {
+	for (const auto& mod : mod_list) {
+		mod->DrawUI(show_menu);
+	}
 }
 
 void ModManager::InitializeImGUI(ImGuiContext* ctx) {
