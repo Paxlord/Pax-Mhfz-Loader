@@ -47,7 +47,7 @@ void InitImGUI(LPDIRECT3DDEVICE9 lpDevice) {
     ImGui_ImplDX9_Init(lpDevice);
     io.ImeWindowHandle = window;
 
-    mINI::INIFile imgui("./imgui.ini");
+    mINI::INIFile imgui("./paxloader.ini");
     mINI::INIStructure ini_imgui;
 
     imgui.read(ini_imgui);

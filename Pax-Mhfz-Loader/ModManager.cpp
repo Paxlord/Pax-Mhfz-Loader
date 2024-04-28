@@ -38,7 +38,7 @@ std::vector<Mod*> ModManager::GetModList() {
 }
 
 void LoadINIConfig() {
-	mINI::INIFile imgui("./imgui.ini");
+	mINI::INIFile imgui("./paxloader.ini");
 	mINI::INIStructure ini_imgui;
 
 	imgui.read(ini_imgui);
@@ -143,7 +143,7 @@ void ModManager::DrawModMenu() {
 	ImGui::Text("Press F12 to hide/show the menu!");
 
 	if (ImGui::Checkbox("Hide on startup", &dont_show)) {
-		mINI::INIFile imgui("./imgui.ini");
+		mINI::INIFile imgui("./paxloader.ini");
 		mINI::INIStructure ini_imgui;
 		imgui.read(ini_imgui);
 		ini_imgui["Mod Menu Config"]["dont_show"] = dont_show ? "1" : "0";
