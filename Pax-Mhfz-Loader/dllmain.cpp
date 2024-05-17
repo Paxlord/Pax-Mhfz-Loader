@@ -111,7 +111,6 @@ DWORD WINAPI Loader(HMODULE base) {
         //First suspension to initialize the loader itself
         SuspendThreads(list);
         ModManager::GetInstance();
-        IMGuiInjection::hookEndScene();
         ResumeThreads(list);
 
         //Infinite loop until the game manager is initialized
@@ -123,6 +122,9 @@ DWORD WINAPI Loader(HMODULE base) {
         SuspendThreads(list);
         ModManagerInit();
         ResumeThreads(list);
+
+        //Once we've loaded every mod, we hook dx9 and display the mods UI
+        IMGuiInjection::hookEndScene();
 
         //Infinite loop to keep this thread up
         while (true) {

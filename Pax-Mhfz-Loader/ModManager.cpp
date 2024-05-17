@@ -38,6 +38,7 @@ std::vector<Mod*> ModManager::GetModList() {
 }
 
 void LoadINIConfig() {
+	std::cout << "Loading INI config file..." << std::endl;
 	mINI::INIFile imgui("./paxloader.ini");
 	mINI::INIStructure ini_imgui;
 
@@ -51,6 +52,7 @@ void LoadINIConfig() {
 
 ModManager::ModManager() {
 
+	
 	LoadConfig();
 	LoadINIConfig();
 
@@ -95,8 +97,12 @@ ModManager::ModManager() {
 }
 
 void ModManager::LoadConfig() {
+	std::cout << "Loading json config file..." << std::endl;
 	std::ifstream f("config.json");
-	if (f.fail()) return;
+	if (f.fail()) {
+		std::cout << "Did not find any json file, skipping..." << std::endl;
+		return;
+	}
 
 	json config_json = json::parse(f);
 	if(config_json.contains("no_lge"))

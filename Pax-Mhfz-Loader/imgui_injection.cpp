@@ -106,6 +106,7 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 void IMGuiInjection::hookEndScene() {
+    std::cout << "Starting DX9 Hooking process..." << std::endl;
     IDirect3D9* pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 
     if (pD3D == NULL) {
@@ -143,9 +144,12 @@ void IMGuiInjection::hookEndScene() {
         std::cout << "Failed to enable hook" << std::endl;
         return;
     }
+    std::cout << "Hooked EndScene..." << std::endl;
 
     MH_CreateHook(vTable[16], &hkReset, reinterpret_cast<void**>(&oReset));
     MH_EnableHook(vTable[16]);
+
+    std::cout << "Hooked Reset..." << std::endl;
 
     std::cout << "Imgui Injection complete!" << std::endl;
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWL_WNDPROC, (LONG_PTR)WndProc);
