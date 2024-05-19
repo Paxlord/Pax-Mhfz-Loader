@@ -1,6 +1,7 @@
 #include "imgui_injection.h"
 #include <fstream>
 #include <ini.h>
+#include "color.hpp"
 
 typedef HRESULT(__stdcall* EndScene)(IDirect3DDevice9* pDevice);
 typedef HRESULT(APIENTRY* Reset)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
@@ -106,11 +107,11 @@ LRESULT WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 void IMGuiInjection::hookEndScene() {
-    std::cout << "Starting DX9 Hooking process..." << std::endl;
+    std::cout << dye::yellow("[MODLOADER] ") << "Starting DX9 Hooking process..." << std::endl;
     IDirect3D9* pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 
     if (pD3D == NULL) {
-        std::cout << "Failed to create D3D9" << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to create D3D9" << std::endl;
         return;
     }
 
@@ -123,7 +124,7 @@ void IMGuiInjection::hookEndScene() {
 
     HRESULT result = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dparams.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dparams, &pDevice);
     if (FAILED(result) || pDevice == NULL) {
-        std::cout << "Failed to Create Device" << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to Create Device" << std::endl;
         pD3D->Release();
         return;
     }
@@ -131,27 +132,27 @@ void IMGuiInjection::hookEndScene() {
     void** vTable = *reinterpret_cast<void***>(pDevice);
 
     if (MH_Initialize() != MH_OK) {
-        std::cout << "Failed to initialize MinHook" << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to initialize MinHook" << std::endl;
         return;
     }
 
     if (MH_CreateHook(vTable[42], &hkEndScene, reinterpret_cast<void**>(&pEndScene)) != MH_OK) {
-        std::cout << "Failed to create hook" << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to create hook" << std::endl;
         return;
     }
 
     if (MH_EnableHook(vTable[42]) != MH_OK) {
-        std::cout << "Failed to enable hook" << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to enable hook" << std::endl;
         return;
     }
-    std::cout << "Hooked EndScene..." << std::endl;
+    std::cout << dye::yellow("[MODLOADER] ") << "Hooked EndScene..." << std::endl;
 
     MH_CreateHook(vTable[16], &hkReset, reinterpret_cast<void**>(&oReset));
     MH_EnableHook(vTable[16]);
 
-    std::cout << "Hooked Reset..." << std::endl;
+    std::cout << dye::yellow("[MODLOADER] ") << "Hooked Reset..." << std::endl;
 
-    std::cout << "Imgui Injection complete!" << std::endl;
+    std::cout << dye::yellow("[MODLOADER] ") << "Imgui Injection complete!" << std::endl;
     oWndProc = (WNDPROC)SetWindowLongPtr(window, GWL_WNDPROC, (LONG_PTR)WndProc);
 
     pDevice->Release();
@@ -168,10 +169,10 @@ HWND IMGuiInjection::getWindowHandle() {
 
 void* IMGuiInjection::CreateDx9Tex(std::string tex_path) {
     PDIRECT3DTEXTURE9 pTexture = NULL;
-    std::cout << tex_path << std::endl;
+    std::cout << dye::yellow("[MODLOADER] ") << "Creating dx9 texture pointer from file : " << tex_path << std::endl;
     HRESULT hr = D3DXCreateTextureFromFileA(game_pDevice, tex_path.c_str(), &pTexture);
     if (FAILED(hr)) {
-        std::cout << "Failed to create texture with code " << std::hex << hr << std::dec << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "Failed to create texture with code " << std::hex << hr << std::dec << std::endl;
         return NULL;
     }
     return reinterpret_cast<void*>(pTexture);

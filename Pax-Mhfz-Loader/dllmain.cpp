@@ -106,11 +106,13 @@ DWORD WINAPI Loader(HMODULE base) {
     std::vector<HANDLE> list = ListProcessThreads(GetCurrentProcessId());
 
     if (SetMhfDllAddy()) {
-        std::cout << "mhfo-hd.dll address found: 0x" << std::hex << mhfdll_addy << std::dec << std::endl;
+        std::cout << dye::yellow("[MODLOADER] ") << "mhfo-hd.dll address found: 0x" << std::hex << mhfdll_addy << std::dec << std::endl;
         
         //First suspension to initialize the loader itself
         SuspendThreads(list);
+        std::cout << dye::yellow("[MODLOADER] ") << "Loading mod files to loader..." << std::endl;
         ModManager::GetInstance();
+        std::cout << dye::yellow("[MODLOADER] ") << "Done with mod loading..." << std::endl;
         ResumeThreads(list);
 
         //Infinite loop until the game manager is initialized
@@ -120,12 +122,13 @@ DWORD WINAPI Loader(HMODULE base) {
 
         //Second suspension after the game initialized to run mods attach function
         SuspendThreads(list);
+        std::cout << dye::yellow("[MODLOADER] ") << "Attaching all mods..." << std::endl;
         ModManagerInit();
         ResumeThreads(list);
 
         //Once we've loaded every mod, we hook dx9 and display the mods UI
+        std::cout << dye::yellow("[MODLOADER] ") << "Beginning of ImGui Setup..." << std::endl;
         IMGuiInjection::hookEndScene();
-
         //Infinite loop to keep this thread up
         while (true) {
             Sleep(50);
