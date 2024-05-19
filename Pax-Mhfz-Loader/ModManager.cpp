@@ -38,7 +38,7 @@ std::vector<Mod*> ModManager::GetModList() {
 }
 
 void LoadINIConfig() {
-	std::cout << dye::yellow("[MODLOADER]") << "Loading INI config file..." << std::endl;
+	std::cout << dye::yellow("[MODLOADER] ") << "Loading INI config file..." << std::endl;
 	mINI::INIFile imgui("./paxloader.ini");
 	mINI::INIStructure ini_imgui;
 
@@ -47,7 +47,7 @@ void LoadINIConfig() {
 	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
 	if (!dont_show_val.empty())
 		dont_show = std::stoi(dont_show_val) != 0;
-	std::cout << dye::yellow("[MODLOADER]") << "Done with INI config file..." << std::endl;
+	std::cout << dye::yellow("[MODLOADER] ") << "Done with INI config file..." << std::endl;
 }
 
 
@@ -132,7 +132,7 @@ void ModManager::AttachAll() {
 	for (const auto& mod : mod_list) {
 		mod->OnAttach();
 	}
-	std::cout << "Attached " << mod_list.size() << " mods successfully." << std::endl;
+	std::cout << dye::yellow("[MODLOADER] ") << "Attached " << mod_list.size() << " mods successfully." << std::endl;
 
 }
 
