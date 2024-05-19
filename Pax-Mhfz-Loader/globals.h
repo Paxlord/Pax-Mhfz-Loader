@@ -1,4 +1,7 @@
 #pragma once
+#include "color.hpp"
+
+#define DEBUG_LOG(msg) (std::cout << dye::yellow("[MODLOADER] ") << msg << std::endl)
 
 inline int mhfdll_addy = 0;
 inline bool NO_LGE = false;

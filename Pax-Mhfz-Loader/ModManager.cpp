@@ -38,7 +38,6 @@ std::vector<Mod*> ModManager::GetModList() {
 }
 
 void LoadINIConfig() {
-	std::cout << dye::yellow("[MODLOADER] ") << "Loading INI config file..." << std::endl;
 	mINI::INIFile imgui("./paxloader.ini");
 	mINI::INIStructure ini_imgui;
 

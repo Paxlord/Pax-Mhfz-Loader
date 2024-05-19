@@ -107,7 +107,7 @@ DWORD WINAPI Loader(HMODULE base) {
 
     if (SetMhfDllAddy()) {
         std::cout << dye::yellow("[MODLOADER] ") << "mhfo-hd.dll address found: 0x" << std::hex << mhfdll_addy << std::dec << std::endl;
-        
+
         //First suspension to initialize the loader itself
         SuspendThreads(list);
         std::cout << dye::yellow("[MODLOADER] ") << "Loading mod files to loader..." << std::endl;
