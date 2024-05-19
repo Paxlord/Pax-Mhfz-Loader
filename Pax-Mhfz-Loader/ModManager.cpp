@@ -38,7 +38,7 @@ std::vector<Mod*> ModManager::GetModList() {
 }
 
 void LoadINIConfig() {
-	std::cout << "Loading INI config file..." << std::endl;
+	std::cout << "[MODLOADER] Loading INI config file..." << std::endl;
 	mINI::INIFile imgui("./paxloader.ini");
 	mINI::INIStructure ini_imgui;
 
@@ -47,19 +47,19 @@ void LoadINIConfig() {
 	auto dont_show_val = ini_imgui.get("Mod Menu Config").get("dont_show");
 	if (!dont_show_val.empty())
 		dont_show = std::stoi(dont_show_val) != 0;
+	std::cout << "[MODLOADER] Done with INI config file..." << std::endl;
 }
 
 
 ModManager::ModManager() {
 
-	
 	LoadConfig();
 	LoadINIConfig();
 
 	std::string mod_folder = "./mods";
 
 	if (!fs::exists(fs::status(mod_folder))) return;
-
+	std::cout << "[MODLOADER] Found mod folder. Parsing..." << std::endl;
 	for (const auto& entry : fs::directory_iterator(mod_folder)) {
 		std::string file_extension = entry.path().extension().generic_string();
 		if (file_extension != ".dll") continue;
@@ -68,7 +68,7 @@ ModManager::ModManager() {
 
 		HMODULE dll_handle = LoadLibrary(absolute_path.c_str());
 		if (!dll_handle) {
-			std::cout << "Error while loading dll : '" << absolute_path << "' Skipping..." << std::endl;
+			std::cout << "[MODLOADER] Error while loading dll : '" << absolute_path << "' Skipping..." << std::endl;
 			continue;
 		}
 		
@@ -76,18 +76,18 @@ ModManager::ModManager() {
 		t_setDllAddy setDllAddy = (t_setDllAddy)(GetProcAddress(dll_handle, "setDllAddress"));
 
 		if (!createMod || !setDllAddy) {
-			std::cout << "GetProcAddress Failed " << GetLastError() << std::endl;
+			std::cout << "[MODLOADER] GetProcAddress Failed " << GetLastError() << std::endl;
 			continue;
 		}
 
 		setDllAddy(mhfdll_addy);
 		Mod* mod = createMod();
 		if (!mod) {
-			std::cout << "Error while creating mod instance " << GetLastError() << std::endl;
+			std::cout << "[MODLOADER] Error while creating mod instance " << GetLastError() << std::endl;
 			continue;
 		}
 
-		std::cout << "Found mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
+		std::cout << "[MODLOADER] Found mod : " << dye::aqua(mod->name) << " at path : " << dye::green(absolute_path) << std::endl;
 		if(CheckModValidity(mod))
 			mod_list.push_back(mod);
 	}
@@ -97,10 +97,11 @@ ModManager::ModManager() {
 }
 
 void ModManager::LoadConfig() {
-	std::cout << "Loading json config file..." << std::endl;
+	std::cout << "[MODLOADER] Loading json config file..." << std::endl;
+
 	std::ifstream f("config.json");
 	if (f.fail()) {
-		std::cout << "Did not find any json file, skipping..." << std::endl;
+		std::cout << "[MODLOADER] Did not find any json file, skipping..." << std::endl;
 		return;
 	}
 
@@ -111,19 +112,20 @@ void ModManager::LoadConfig() {
 	ParseConfigArray(config_json, "required", required);
 	ParseConfigArray(config_json, "allowed", allowed);
 
-	std::cout << "Required items:" << std::endl;
+	std::cout << "[MODLOADER] Required items:" << std::endl;
 	for (const auto& req : required) {
 		std::cout << req->name << ": " << req->version << ", ";
 		std::cout << std::endl;
 	}
 
-	std::cout << "Allowed items:" << std::endl;
+	std::cout << "[MODLOADER] Allowed items:" << std::endl;
 	for (const auto& allow : allowed) {
 		std::cout << allow->name << ": " << allow->version << ", ";
 		std::cout << std::endl;
 	}
 
 	f.close();
+	std::cout << "[MODLOADER] Done with json config file..." << std::endl;
 }
 
 void ModManager::AttachAll() {
