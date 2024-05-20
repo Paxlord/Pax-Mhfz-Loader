@@ -60,17 +60,21 @@ ModManager::ModManager() {
 	if (!fs::exists(fs::status(mod_folder))) return;
 	std::cout << dye::yellow("[MODLOADER] ") << "Found mod folder. Parsing..." << std::endl;
 	for (const auto& entry : fs::directory_iterator(mod_folder)) {
+		DEBUG_LOG("========PARSING FILE========");
+		DEBUG_LOG("Evaluating file extension...");
 		std::string file_extension = entry.path().extension().generic_string();
 		if (file_extension != ".dll") continue;
-
+		DEBUG_LOG("Found DLL... Converting to absolute path...");
 		std::string absolute_path = fs::absolute(entry.path()).generic_string();
-
+		
+		DEBUG_LOG("Loading Library");
 		HMODULE dll_handle = LoadLibrary(absolute_path.c_str());
 		if (!dll_handle) {
 			std::cout << dye::yellow("[MODLOADER] ") << "Error while loading dll : '" << absolute_path << "' Skipping..." << std::endl;
 			continue;
 		}
 		
+		DEBUG_LOG("Get Proc Address...");
 		t_createMod createMod = (t_createMod)(GetProcAddress(dll_handle, "createMod"));
 		t_setDllAddy setDllAddy = (t_setDllAddy)(GetProcAddress(dll_handle, "setDllAddress"));
 
@@ -79,7 +83,9 @@ ModManager::ModManager() {
 			continue;
 		}
 
+		DEBUG_LOG("Passing dll context...");
 		setDllAddy(mhfdll_addy);
+		DEBUG_LOG("Creating Instance...");
 		Mod* mod = createMod();
 		if (!mod) {
 			std::cout << dye::yellow("[MODLOADER] ") << "Error while creating mod instance " << GetLastError() << std::endl;
