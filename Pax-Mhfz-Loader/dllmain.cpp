@@ -118,10 +118,10 @@ DWORD WINAPI Loader(HMODULE base) {
         } while (*(DWORD*)(mhfdll_addy + 0xE7FFF3C) == 0);
 
         //Second suspension after the game initialized to run mods attach function
-        SuspendThreads(list);
+        //SuspendThreads(list);
         std::cout << dye::yellow("[MODLOADER] ") << "Attaching all mods..." << std::endl;
         ModManagerInit();
-        ResumeThreads(list);
+        //ResumeThreads(list);
 
         //Once we've loaded every mod, we hook dx9 and display the mods UI
         std::cout << dye::yellow("[MODLOADER] ") << "Beginning of ImGui Setup..." << std::endl;
