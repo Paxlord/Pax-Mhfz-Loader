@@ -75,7 +75,6 @@ bool SetMhfDllAddy() {
 
 void ModManagerInit() {
     ModManager::GetInstance()->AttachAll();
-    ModManager::GetInstance()->HookUpdates();
 }
 
 void SuspendThreads(std::vector<HANDLE> list) {
@@ -127,6 +126,9 @@ DWORD WINAPI Loader(HMODULE base) {
         //Once we've loaded every mod, we hook dx9 and display the mods UI
         std::cout << dye::yellow("[MODLOADER] ") << "Beginning of ImGui Setup..." << std::endl;
         IMGuiInjection::hookEndScene();
+
+        ModManager::GetInstance()->HookUpdates();
+
         //Infinite loop to keep this thread up
         while (true) {
             Sleep(50);
