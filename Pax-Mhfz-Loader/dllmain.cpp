@@ -109,11 +109,9 @@ DWORD WINAPI Loader(HMODULE base) {
         std::cout << dye::yellow("[MODLOADER] ") << "mhfo-hd.dll address found: 0x" << std::hex << mhfdll_addy << std::dec << std::endl;
 
         //First suspension to initialize the loader itself
-        SuspendThreads(list);
         std::cout << dye::yellow("[MODLOADER] ") << "Loading mod files to loader..." << std::endl;
         ModManager::GetInstance();
         std::cout << dye::yellow("[MODLOADER] ") << "Done with mod loading..." << std::endl;
-        ResumeThreads(list);
 
         //Infinite loop until the game manager is initialized
         do {
