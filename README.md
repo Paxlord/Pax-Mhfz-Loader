@@ -69,3 +69,8 @@ Here is an example config :
   ]
 }
 ```
+## Known Issues
+- Problem: Sometimes the game will just get stuck in place at startup, happens rarely (~once out of 20-25 game launches)
+  - Solution: Closing the game and restarting should work.   
+- Problem: Very rarely the game crashes at startup (~once out of 15 launches)
+  - Solution: Starting the game back up should do the trick.
