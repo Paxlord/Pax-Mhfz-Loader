@@ -1,6 +1,6 @@
 # Pax's MHFZ Mod Loader
 
-General-purpose mod loader for Monster hunter frontier Z.
+General-purpose mod loader for Monster hunter frontier Z. My mods are stored in this repo : https://github.com/Paxlord/Pax-MHFZ-Mod-Repository
 
 If you encounter any issue with the loader or any of my mods, feel free to raise an issue or shoot me a dm on Discord at @pax_777
 
