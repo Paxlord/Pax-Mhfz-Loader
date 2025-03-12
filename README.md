@@ -28,8 +28,8 @@ At this point, I feel like the loader is in a pretty good spot and can do its jo
 
 ## How to use
 ### Installation
-
-Drop the content of the ```paxloader.zip``` archive inside your mhfz folder. When launching the game, you should see a console and a new window in the game called "Mod Menu".
+- Check the Release of this repo (link here : https://github.com/Paxlord/Pax-Mhfz-Loader/releases) and download the latest paxloader.zip archive
+- Unzip and drop the content of the ```paxloader.zip``` archive inside your mhfz folder, . When launching the game, you should see a console and a new window in the game called "Mod Menu".
 ![image](https://github.com/Paxlord/Pax-Mhfz-Loader/assets/19719025/0ac8f259-ed4c-443d-b196-0abff7dbfaf9)
 
 
